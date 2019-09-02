@@ -15,16 +15,16 @@ public class Road {
         orientation = Orientation;
         speedLimit = speedLim;
     }
-    public int getSpeedLimit() {
+    int getSpeedLimit() {
         return speedLimit;
     }
-    public int getNumSegments(){
+    int getNumSegments(){
         return  numSegments;
     }
-    public String getOrientation(){
+    String getOrientation(){
         return orientation;
     }
-    public int getRoadPosition(){
+    int getRoadPosition(){
         return roadID;
     }
 }
