@@ -3,10 +3,10 @@ class TrafficLight {
     private int roadId;
     private int segmentOfRoad;
 
-    TrafficLight(int roadID){
-        status = false;
+    TrafficLight(int roadID, int roadSegment){
+        status = false; // by default the light is red
         roadId = roadID;
-        segmentOfRoad = 1;
+        segmentOfRoad = roadSegment;
     }
 
     boolean getStatus(){
@@ -18,8 +18,8 @@ class TrafficLight {
     int getSegmentOfRoad(){
         return segmentOfRoad;
     }
-    void changeStatus(){
-        status = !status;
+    void changeStatus(boolean stat){
+        status = stat;
     }
 
 }

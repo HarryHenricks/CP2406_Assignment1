@@ -1,6 +1,6 @@
 public class Road {
     private int numSegments;
-    private int speedLimit;
+    private double speedLimit;
     private String orientation;
     private int roadID; // This will need to be a 2 dimensional array later, or 2 variables representing both dimensions
 
@@ -8,14 +8,15 @@ public class Road {
         roadID = positionOfRoad;
         numSegments = numberOfSegments;
         orientation = "Horizontal";
+        speedLimit = 50.0/3; // 60km/hr in m/s let this be the default limit
     }
-    Road(int numberOfSegments, String Orientation, int speedLim, int positionOnRoad){
+    Road(int numberOfSegments, String Orientation, double speedLim, int positionOnRoad){
         roadID = positionOnRoad;
         numSegments = numberOfSegments;
         orientation = Orientation;
         speedLimit = speedLim;
     }
-    int getSpeedLimit() {
+    double getSpeedLimit() {
         return speedLimit;
     }
     int getNumSegments(){
@@ -24,7 +25,7 @@ public class Road {
     String getOrientation(){
         return orientation;
     }
-    int getRoadPosition(){
+    int getRoadID(){
         return roadID;
     }
 }

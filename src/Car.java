@@ -28,5 +28,12 @@ public class Car {
     int getSegmentOfRoad(){
         return segmentOfRoad;
     }
+    void drive(){
+        segmentOfRoad += 1;
+    }
+    void changeRoad(int newRoad){
+        roadId = newRoad;
+        segmentOfRoad = 1;
+    }
 
 }

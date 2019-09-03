@@ -6,7 +6,7 @@ class TestRoad {
     @Test void checkRoad(){
         Road road = new Road(10, 1);
         assertEquals(road.getNumSegments(), 10);
-        assertEquals(road.getRoadPosition(), 1);
+        assertEquals(road.getRoadID(), 1);
         assertEquals(road.getOrientation(), "Horizontal");
         assertEquals(road.getSpeedLimit(), 0);
     }
