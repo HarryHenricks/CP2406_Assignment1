@@ -4,16 +4,16 @@ public class Car {
     private int roadId;
     private int segmentOfRoad;
 
-    Car(int roadID){
+    Car(int roadId){
         type = "Car";
         length = 1;
         segmentOfRoad = 1;
-        roadId = roadID;
+        this.roadId = roadId;
     }
-    Car(String typeOfVehicle, int vehicleLength, int roadID){
-        type = typeOfVehicle;
-        length = vehicleLength;
-        roadId = roadID;
+    Car(String type, int length, int roadId){
+        this.type = type;
+        this.length = length;
+        this.roadId = roadId;
         segmentOfRoad = 1;
     }
     String getType(){
