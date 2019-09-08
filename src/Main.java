@@ -35,7 +35,7 @@ public class Main {
 
         }
     }
-    
+
     private static List drive(List carList, List roadList, List trafficLightList) {
         Road currentRoad;
         Car currentCar;
@@ -85,12 +85,12 @@ public class Main {
     private static void updateTrafficLights(List trafficLightList, double rateOfChange){ // rate of change is the percentage chance of a traffic light changing
         TrafficLight currentTrafficLight;
         double changeVar;
-        for (int i=0; i<trafficLightList.size(); ++i){
-           changeVar = Math.random();
-           currentTrafficLight = (TrafficLight) trafficLightList.get(i);
-           if (changeVar <= rateOfChange){ // if the random value is less than or equal to the chance of traffic light changing
-               currentTrafficLight.changeStatus(); // then flip the status of the traffic light
-           }
+        for (Object o : trafficLightList) {
+            changeVar = Math.random();
+            currentTrafficLight = (TrafficLight) o;
+            if (changeVar <= rateOfChange) { // if the random value is less than or equal to the chance of traffic light changing
+                currentTrafficLight.changeStatus(); // then flip the status of the traffic light
+            }
         }
     }
 }
