@@ -4,22 +4,25 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) throws InterruptedException {
 
+        // Create objects for this simulation
         Road road1 = new Road(5, 1,2);
         Road road2 = new Road(5, 2,0);
-
         TrafficLight trafficLight = new TrafficLight(1, 3);
         Car car = new Car(1);
 
+        // Lists to store objects
         List<Car> carList = new ArrayList<>();
         List<Road> roadList = new ArrayList<>();
         List<TrafficLight> trafficLightList = new ArrayList<>();
 
-
+        // Write objects into the lists
         carList.add(car);
         roadList.add(road1);
         roadList.add(road2);
         trafficLightList.add(trafficLight);
 
+        // set the probability of traffic lights changing
+        double rateOfChange = 0.8;
 
         //simulation loop
         while (true) {
@@ -27,12 +30,12 @@ public class Main {
 
             Thread.sleep(1000); // wait 1 second before trying to drive the car
 
+            updateTrafficLights(trafficLightList, rateOfChange);
             carList = drive(carList, roadList, trafficLightList);
-            trafficLight.changeStatus(true);
+
         }
     }
-
-
+    
     private static List drive(List carList, List roadList, List trafficLightList) {
         Road currentRoad;
         Car currentCar;
@@ -79,6 +82,16 @@ public class Main {
         }
     }
 
-
+    private static void updateTrafficLights(List trafficLightList, double rateOfChange){ // rate of change is the percentage chance of a traffic light changing
+        TrafficLight currentTrafficLight;
+        double changeVar;
+        for (int i=0; i<trafficLightList.size(); ++i){
+           changeVar = Math.random();
+           currentTrafficLight = (TrafficLight) trafficLightList.get(i);
+           if (changeVar <= rateOfChange){ // if the random value is less than or equal to the chance of traffic light changing
+               currentTrafficLight.changeStatus(); // then flip the status of the traffic light
+           }
+        }
+    }
 }
 

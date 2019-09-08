@@ -18,8 +18,8 @@ class TrafficLight {
     int getSegmentOfRoad(){
         return segmentOfRoad;
     }
-    void changeStatus(boolean status){
-        this.status = status;
+    void changeStatus(){
+        status = !status;
     }
 
 }
