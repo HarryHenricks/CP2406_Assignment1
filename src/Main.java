@@ -3,10 +3,31 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
+        /* Currently the simulation will run a more complex simulation with multiple objetcs, for a simple
+        simulation of just 2 roads, a traffic light and a car, replace the create objects section and write
+        objects section with the code contained below in this comment
+
+        Replace lines 24 - 32 with the following:
+        Road road1 = new Road(4, 1,2, true);
+        Road road2 = new Road(6, 2,0, false);
+        TrafficLight trafficLight = new TrafficLight(1, 3);
+        Car car1 = new Car(1);
+
+        And replace lines 40 - 48 with:
+        carList.add(car1);
+        roadList.add(road1);
+        roadList.add(road2);
+        trafficLightList.add(trafficLight);
+         */
+
         // Create objects for this simulation
-        Road road1 = new Road(5, 1,2, true);
-        Road road2 = new Road(5, 2,0, false);
-        TrafficLight trafficLight1 = new TrafficLight(1, 3);
+        Road road1 = new Road(7, 1,2, true);
+        Road road2 = new Road(5, 2,5, false);
+        Road road3 = new Road(8, 3, 4, true);
+        Road road4 = new Road(6, 4, 5, false);
+        Road road5 = new Road(5, 5, 0, false);
+        TrafficLight trafficLight1 = new TrafficLight(2, 4);
+        TrafficLight trafficLight2 = new TrafficLight(4, 5);
         Car car1 = new Car(1);
         Car car2 = new Car(1);
 
@@ -20,7 +41,11 @@ public class Main {
         carList.add(car2);
         roadList.add(road1);
         roadList.add(road2);
+        roadList.add(road3);
+        roadList.add(road4);
+        roadList.add(road5);
         trafficLightList.add(trafficLight1);
+        trafficLightList.add(trafficLight2);
 
         // set the probability of traffic lights changing
         double rateOfChange = 0.8;
@@ -33,7 +58,7 @@ public class Main {
         while (endSimulation) {
             carList = spawnCar(roadList, carList, maximumCars, spawnProbability);
             checkCarStatus(carList); // display the status of all cars
-            Thread.sleep(1000); // wait 1 second before trying to drive the car
+            Thread.sleep(1500); // wait 1 second before trying to drive the car
             updateTrafficLights(trafficLightList, rateOfChange);
             carList = drive(carList, roadList, trafficLightList);
             endSimulation = endSimulation(carList);
