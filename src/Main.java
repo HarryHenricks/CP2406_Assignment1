@@ -1,10 +1,8 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-
         // Create objects for this simulation
         Road road1 = new Road(5, 1,2, true);
         Road road2 = new Road(5, 2,0, false);
@@ -35,13 +33,10 @@ public class Main {
         while (endSimulation) {
             carList = spawnCar(roadList, carList, maximumCars, spawnProbability);
             checkCarStatus(carList); // display the status of all cars
-
             Thread.sleep(1000); // wait 1 second before trying to drive the car
-
             updateTrafficLights(trafficLightList, rateOfChange);
             carList = drive(carList, roadList, trafficLightList);
             endSimulation = endSimulation(carList);
-
         }
     }
 
@@ -49,6 +44,7 @@ public class Main {
         Road currentRoad;
         Car currentCar;
         TrafficLight currentTrafficLight;
+        List<Car> newCarList = new ArrayList<>();
         boolean canDrive = false;
         for (int i=0; i<carList.size(); ++i){ // check for every car if they can drive
             currentCar = (Car) carList.get(i);
@@ -56,11 +52,11 @@ public class Main {
             if (currentCar.getSegmentOfRoad() == currentRoad.getNumSegments()-1){ // if car is at last segment of road
                 if (currentRoad.getNextRoadId() != 0) { // if next road exists
                     currentCar.changeRoad(currentRoad.getNextRoadId()); // then move the car to the next road
-                    carList.add(currentCar);
+                    carList.set(i, currentCar);
                 } else { // else the car is at the last segment of the last road
-                    System.out.println("Car " + (i+1) + " is at the end of the last road and can't drive any further");
-                    carList.remove(i); // then delete the car as it has driven to its destination
-                    --i; // as the car object has been removed, the indexing number i needs to be corrected
+                    System.out.println("Car is at the end of the last road and can't drive any further");
+                    carList.remove(currentCar); // then delete the car as it has driven to its destination
+                    --i;
                 }
             } else { // car not at last segment of a road
                 for (Object o : trafficLightList) { // for each traffic light check if they will stop any cars
@@ -74,8 +70,8 @@ public class Main {
                 }
                 if (canDrive){ // if car is able to drive
                     currentCar.drive(); // then car can drive
+                    carList.set((i), currentCar); // update car in the array list
                 }
-                carList.set((i), currentCar); // update car in the array list
             }
         }
         return carList;
@@ -84,6 +80,9 @@ public class Main {
     private static void checkCarStatus(List carList) {
         Car currentCar;
         for (int i=0; i<carList.size(); ++i) {
+            if(carList.get(0) == null){ // if the first car in the array is empty, then no cars in the simulation
+                break;
+            }
             currentCar = (Car) carList.get(i);
             System.out.println("Car " + (i+1) + " is on road " + currentCar.getRoadId() + " and is at segment " + currentCar.getSegmentOfRoad());
         }
@@ -126,4 +125,3 @@ public class Main {
         return carList;
     }
 }
-

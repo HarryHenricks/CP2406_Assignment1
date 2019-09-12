@@ -7,5 +7,6 @@ class TestTrafficLight {
         TrafficLight trafficLight = new TrafficLight(1, 5);
         assertEquals(trafficLight.getRoadId(),1);
         assertEquals(trafficLight.getSegmentOfRoad(), 5);
+        assertFalse(trafficLight.getStatus());
     }
 }
