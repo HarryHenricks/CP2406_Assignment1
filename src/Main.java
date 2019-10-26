@@ -24,24 +24,18 @@ public class Main extends JPanel {
 
         // Create objects for this simulation
 
-        TrafficLight trafficLight1 = new TrafficLight(2, 4);
-        TrafficLight trafficLight2 = new TrafficLight(4, 5);
         Car car1 = new Car(1);
         Car car2 = new Car(1);
 
         // Lists to store objects
         List<Car> carList = new ArrayList<>();
 
-        List<TrafficLight> trafficLightList = new ArrayList<>();
-
         // Write objects into the lists
         carList.add(car1);
         carList.add(car2);
 
-        trafficLightList.add(trafficLight1);
-        trafficLightList.add(trafficLight2);
-
         List roadList = loadRoads();
+        List trafficLightList = loadLights();
 
         runSimulation(carList, roadList, trafficLightList);
 
@@ -52,10 +46,28 @@ public class Main extends JPanel {
         super.paintComponent(g);
     }
 
-    private static List loadRoads() throws IOException {
-
+    private static List loadLights() throws IOException {
         String currentLine = "";
-        BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\Harry\\IdeaProjects\\CP2406_Assignment1\\src\\CSVData\\CityData.csv"));
+        BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\Harry\\IdeaProjects\\CP2406_Assignment1\\src\\CSVData\\LightData.csv"));
+
+        List<TrafficLight> trafficLightList = new ArrayList<>();
+
+        int roadId, segmentOfRoad;
+
+        String[] currentData;
+        while ((currentLine = reader.readLine()) != null){
+            currentData = currentLine.split(",");
+            roadId = Integer.parseInt(currentData[0]);
+            segmentOfRoad = Integer.parseInt(currentData[1]);
+
+            trafficLightList.add(new TrafficLight(roadId, segmentOfRoad));
+        }
+        return trafficLightList;
+    }
+
+    private static List loadRoads() throws IOException {
+        String currentLine = "";
+        BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\Harry\\IdeaProjects\\CP2406_Assignment1\\src\\CSVData\\RoadData.csv"));
 
         List<Road> roadList = new ArrayList<>();
 
@@ -72,7 +84,6 @@ public class Main extends JPanel {
 
             roadList.add(new Road(numSegments, roadId, nextRoadId, startRoad));
         }
-
         return roadList;
     }
 
