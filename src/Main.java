@@ -1,31 +1,29 @@
+import javax.swing.*;
+import java.awt.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Main {
-    public static void main(String[] args) throws InterruptedException {
-        /* Currently the simulation will run a more complex simulation with multiple objetcs, for a simple
-        simulation of just 2 roads, a traffic light and a car, replace the create objects section and write
-        objects section with the code contained below in this comment
+public class Main extends JPanel {
 
-        Replace lines 24 - 32 with the following:
-        Road road1 = new Road(4, 1,2, true);
-        Road road2 = new Road(6, 2,0, false);
-        TrafficLight trafficLight = new TrafficLight(1, 3);
-        Car car1 = new Car(1);
+    private Main(){
+        setBackground(Color.WHITE);
+    }
 
-        And replace lines 40 - 48 with:
-        carList.add(car1);
-        roadList.add(road1);
-        roadList.add(road2);
-        trafficLightList.add(trafficLight);
-         */
+    public static void main(String[] args) throws InterruptedException, IOException {
+        JFrame mainFrame = new JFrame();
+        mainFrame.add(new Main());
+        mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        mainFrame.setSize(900, 700);
+
+        mainFrame.setLocationRelativeTo(null);
+        mainFrame.setVisible(true);
 
         // Create objects for this simulation
-        Road road1 = new Road(7, 1,2, true);
-        Road road2 = new Road(5, 2,5, false);
-        Road road3 = new Road(8, 3, 4, true);
-        Road road4 = new Road(6, 4, 5, false);
-        Road road5 = new Road(5, 5, 0, false);
+
         TrafficLight trafficLight1 = new TrafficLight(2, 4);
         TrafficLight trafficLight2 = new TrafficLight(4, 5);
         Car car1 = new Car(1);
@@ -33,20 +31,52 @@ public class Main {
 
         // Lists to store objects
         List<Car> carList = new ArrayList<>();
-        List<Road> roadList = new ArrayList<>();
+
         List<TrafficLight> trafficLightList = new ArrayList<>();
 
         // Write objects into the lists
         carList.add(car1);
         carList.add(car2);
-        roadList.add(road1);
-        roadList.add(road2);
-        roadList.add(road3);
-        roadList.add(road4);
-        roadList.add(road5);
+
         trafficLightList.add(trafficLight1);
         trafficLightList.add(trafficLight2);
 
+        List roadList = loadRoads();
+
+        runSimulation(carList, roadList, trafficLightList);
+
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+    }
+
+    private static List loadRoads() throws IOException {
+
+        String currentLine = "";
+        BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\Harry\\IdeaProjects\\CP2406_Assignment1\\src\\CSVData\\CityData.csv"));
+
+        List<Road> roadList = new ArrayList<>();
+
+        int numSegments, roadId, nextRoadId;
+        boolean startRoad;
+
+        String[] currentData;
+        while ((currentLine = reader.readLine()) != null){
+            currentData = currentLine.split(",");
+            numSegments = Integer.parseInt(currentData[0]);
+            roadId = Integer.parseInt(currentData[1]);
+            nextRoadId = Integer.parseInt(currentData[2]);
+            startRoad = Boolean.parseBoolean(currentData[3]);
+
+            roadList.add(new Road(numSegments, roadId, nextRoadId, startRoad));
+        }
+
+        return roadList;
+    }
+
+    private static void runSimulation(List carList, List roadList, List trafficLightList) throws InterruptedException {
         // set the probability of traffic lights changing
         double rateOfChange = 0.8;
         boolean endSimulation = true; // variable that keeps simulation running, set to false when all cars have reached
