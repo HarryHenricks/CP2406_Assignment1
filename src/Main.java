@@ -3,7 +3,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
-import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,13 +10,14 @@ public class Main extends JPanel implements ActionListener {
 
     private Main(){
         setBackground(Color.WHITE);
-        add(startSimulation);
-        add(endSimulation);
+        add(startSimulationBtn);
+        add(endSimulationBtn);
+        startSimulationBtn.addActionListener(this);
+        endSimulationBtn.addActionListener(this);
     }
 
-    private JButton startSimulation = new JButton("Run simulation");
-    private JButton endSimulation = new JButton("Stop simulation");
-
+    private JButton startSimulationBtn = new JButton("Run simulation");
+    private JButton endSimulationBtn = new JButton("Stop simulation");
 
     public static void main(String[] args) throws InterruptedException, IOException {
         JFrame mainFrame = new JFrame();
@@ -28,23 +28,20 @@ public class Main extends JPanel implements ActionListener {
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setVisible(true);
 
-        // Create objects for this simulation
 
+        List<Car> carList = new ArrayList<>();
         Car car1 = new Car(1);
         Car car2 = new Car(1);
-
-        // Lists to store objects
-        List<Car> carList = new ArrayList<>();
-
-        // Write objects into the lists
         carList.add(car1);
         carList.add(car2);
 
-        List roadList = loadRoads();
-        List trafficLightList = loadLights();
+        List roadList;
+        List trafficLightList;
+
+        roadList = loadRoads();
+        trafficLightList = loadLights();
+
         runSimulation(carList, roadList, trafficLightList);
-
-
     }
 
     private static void runSimulation(List carList, List roadList, List trafficLightList) throws InterruptedException {
@@ -66,20 +63,20 @@ public class Main extends JPanel implements ActionListener {
         }
     }
 
-
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == startSimulationBtn){
 
+        } else if (e.getSource() == endSimulationBtn){
 
+        }
     }
-
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Road currentRoad;
         TrafficLight currentTrafficLight;
-        int segmentToPixels = 30;
         int roadWidth = 15; // width of road in pixels
         int roadLength = 30; // length of a road segment in pixels
         int currentx = 0;
@@ -89,39 +86,38 @@ public class Main extends JPanel implements ActionListener {
             List roadList = loadRoads();
             List trafficLightList = loadLights();
 
-            for (int i=0; i<roadList.size(); ++i){
+            for (int i = 0; i < roadList.size(); ++i) {
                 currentRoad = (Road) roadList.get(i);
-                if (currentRoad.getStartRoad()){
+                if (currentRoad.getStartRoad()) {
                     currentx = 0; // if start road then needs to be drawn against left hand side of panel
                 }
-                for (int j=0; j<currentRoad.getNumSegments(); ++j) {
+                for (int j = 0; j < currentRoad.getNumSegments(); ++j) {
 
                     for (Object o : trafficLightList) {
                         currentTrafficLight = (TrafficLight) o;
                         if (currentTrafficLight.getRoadId() == currentRoad.getRoadID() && currentTrafficLight.getSegmentOfRoad() == j) { // if there is a traffic light on the segment about to be drawn
                             if (currentTrafficLight.getStatus()) { // if status is true, then we will want to colour the segment green
                                 g.setColor(Color.GREEN);
-                                if (currentRoad.getOrientation().equals("Horizontal")){
+                                if (currentRoad.getOrientation().equals("Horizontal")) {
                                     g.fillRect(currentx, currenty, roadLength, roadWidth);
                                     currentx += roadLength;
-                                } else{
+                                } else {
                                     g.fillRect(currentx, currenty, roadWidth, roadLength);
                                     currenty += roadLength;
                                 }
 
                             } else { // otherwise red
                                 g.setColor(Color.RED);
-                                if (currentRoad.getOrientation().equals("Horizontal")){
+                                if (currentRoad.getOrientation().equals("Horizontal")) {
                                     g.fillRect(currentx, currenty, roadLength, roadWidth);
                                     currentx += roadLength;
-                                } else{
+                                } else {
                                     g.fillRect(currentx, currenty, roadWidth, roadLength);
                                     currenty += roadLength;
                                 }
                             }
                         }
                     }
-
                     g.setColor(Color.BLACK);
                     if (currentRoad.getOrientation().equals("Horizontal")) {
                         g.drawRect(currentx, currenty, roadLength, roadWidth);
@@ -137,9 +133,8 @@ public class Main extends JPanel implements ActionListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
+
 
     private static List loadLights() throws IOException {
         String currentLine = "";
