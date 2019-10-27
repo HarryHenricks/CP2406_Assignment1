@@ -1,5 +1,5 @@
-7,1,2,true
-5,2,5,false
-8,3,4,true
-6,4,5,false
-5,5,0,false
+7,Horizontal,1,2,true
+5,Vertical,2,5,false
+8,Horizontal,3,4,true
+6,Vertical,4,5,false
+5,Horizontal,5,0,false
