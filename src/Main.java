@@ -1,3 +1,5 @@
+import org.junit.jupiter.params.shadow.com.univocity.parsers.csv.CsvWriter;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -24,10 +26,11 @@ public class Main extends JPanel implements ActionListener {
         mainFrame.add(new Main());
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         mainFrame.setSize(900, 700);
-
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setVisible(true);
+    }
 
+    private void runSimulation() throws InterruptedException, IOException {
 
         List<Car> carList = new ArrayList<>();
         Car car1 = new Car(1);
@@ -41,10 +44,6 @@ public class Main extends JPanel implements ActionListener {
         roadList = loadRoads();
         trafficLightList = loadLights();
 
-        runSimulation(carList, roadList, trafficLightList);
-    }
-
-    private static void runSimulation(List carList, List roadList, List trafficLightList) throws InterruptedException {
         // set the probability of traffic lights changing
         double rateOfChange = 0.8;
         boolean endSimulation = true; // variable that keeps simulation running, set to false when all cars have reached
@@ -60,13 +59,21 @@ public class Main extends JPanel implements ActionListener {
             updateTrafficLights(trafficLightList, rateOfChange);
             carList = drive(carList, roadList, trafficLightList);
             endSimulation = endSimulation(carList);
+            saveData(roadList, trafficLightList);
         }
+
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == startSimulationBtn){
-
+            try {
+                runSimulation();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         } else if (e.getSource() == endSimulationBtn){
 
         }
@@ -133,6 +140,36 @@ public class Main extends JPanel implements ActionListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void saveData(List roadList, List trafficLightList) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter("src\\CSVData\\RoadData.csv"));
+        int currentNumSegments, currentRoadId, nextRoadId;
+        String currentOrientation;
+        boolean currentStartRoad;
+        Road currentRoad;
+        for (Object o : roadList) {
+            currentRoad = (Road) o;
+            currentNumSegments = currentRoad.getNumSegments();
+            currentOrientation = currentRoad.getOrientation();
+            currentRoadId = currentRoad.getRoadID();
+            nextRoadId = currentRoad.getNextRoadId();
+            currentStartRoad = currentRoad.getStartRoad();
+            String line = currentNumSegments + "," + currentOrientation + "," + currentRoadId + "," + nextRoadId + "," + currentStartRoad + "\n";
+            writer.write(line);
+        }
+        writer.close();
+        writer = new BufferedWriter(new FileWriter("src\\CSVData\\LightData.csv"));
+        int roadId, segmentOfRoad;
+        TrafficLight currentLight;
+        for (Object o : trafficLightList){
+            currentLight = (TrafficLight) o;
+            roadId = currentLight.getRoadId();
+            segmentOfRoad = currentLight.getSegmentOfRoad();
+            String line = roadId + "," + segmentOfRoad + "\n";
+            writer.write(line);
+        }
+        writer.close();
     }
 
 
