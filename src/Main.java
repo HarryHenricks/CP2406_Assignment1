@@ -21,13 +21,14 @@ public class Main extends JPanel implements ActionListener {
     private JButton startSimulationBtn = new JButton("Run simulation");
     private JButton endSimulationBtn = new JButton("Stop simulation");
 
-    public static void main(String[] args) throws InterruptedException, IOException {
+    public static void main(String[] args) {
         JFrame mainFrame = new JFrame();
         mainFrame.add(new Main());
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         mainFrame.setSize(900, 700);
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setVisible(true);
+
     }
 
     private void runSimulation() throws InterruptedException, IOException {
@@ -69,9 +70,7 @@ public class Main extends JPanel implements ActionListener {
         if (e.getSource() == startSimulationBtn){
             try {
                 runSimulation();
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            } catch (IOException ex) {
+            } catch (InterruptedException | IOException ex) {
                 ex.printStackTrace();
             }
         } else if (e.getSource() == endSimulationBtn){
