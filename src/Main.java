@@ -1,5 +1,3 @@
-import org.junit.jupiter.params.shadow.com.univocity.parsers.csv.CsvWriter;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -28,30 +26,24 @@ public class Main extends JPanel implements ActionListener {
         mainFrame.setSize(900, 700);
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setVisible(true);
-
     }
 
     private void runSimulation() throws InterruptedException, IOException {
-
         List<Car> carList = new ArrayList<>();
         Car car1 = new Car(1);
         Car car2 = new Car(1);
         carList.add(car1);
         carList.add(car2);
-
         List roadList;
         List trafficLightList;
-
         roadList = loadRoads();
         trafficLightList = loadLights();
-
         // set the probability of traffic lights changing
         double rateOfChange = 0.8;
         boolean endSimulation = true; // variable that keeps simulation running, set to false when all cars have reached
         // their destination, ie when car list is empty (because when car runs out of roads it is deleted)
         int maximumCars = 3; // controls the maximum number of cars able to be in the simulation
         double spawnProbability = 0.25; // controls probability that a car will spawn if it can
-
         //simulation loop
         while (endSimulation) {
             carList = spawnCar(roadList, carList, maximumCars, spawnProbability);
@@ -62,7 +54,6 @@ public class Main extends JPanel implements ActionListener {
             endSimulation = endSimulation(carList);
             saveData(roadList, trafficLightList);
         }
-
     }
 
     @Override
@@ -87,18 +78,15 @@ public class Main extends JPanel implements ActionListener {
         int roadLength = 30; // length of a road segment in pixels
         int currentx = 0;
         int currenty = 150;
-
         try {
             List roadList = loadRoads();
             List trafficLightList = loadLights();
-
             for (int i = 0; i < roadList.size(); ++i) {
                 currentRoad = (Road) roadList.get(i);
                 if (currentRoad.getStartRoad()) {
                     currentx = 0; // if start road then needs to be drawn against left hand side of panel
                 }
                 for (int j = 0; j < currentRoad.getNumSegments(); ++j) {
-
                     for (Object o : trafficLightList) {
                         currentTrafficLight = (TrafficLight) o;
                         if (currentTrafficLight.getRoadId() == currentRoad.getRoadID() && currentTrafficLight.getSegmentOfRoad() == j) { // if there is a traffic light on the segment about to be drawn
@@ -111,7 +99,6 @@ public class Main extends JPanel implements ActionListener {
                                     g.fillRect(currentx, currenty, roadWidth, roadLength);
                                     currenty += roadLength;
                                 }
-
                             } else { // otherwise red
                                 g.setColor(Color.RED);
                                 if (currentRoad.getOrientation().equals("Horizontal")) {
@@ -132,7 +119,6 @@ public class Main extends JPanel implements ActionListener {
                         g.drawRect(currentx, currenty, roadWidth, roadLength);
                         currenty += roadLength;
                     }
-
                 }
             }
 
@@ -185,7 +171,6 @@ public class Main extends JPanel implements ActionListener {
             currentData = currentLine.split(",");
             roadId = Integer.parseInt(currentData[0]);
             segmentOfRoad = Integer.parseInt(currentData[1]);
-
             trafficLightList.add(new TrafficLight(roadId, segmentOfRoad));
         }
         return trafficLightList;
@@ -194,13 +179,10 @@ public class Main extends JPanel implements ActionListener {
     private static List loadRoads() throws IOException {
         String currentLine = "";
         BufferedReader reader = new BufferedReader(new FileReader("src\\CSVData\\RoadData.csv"));
-
         List<Road> roadList = new ArrayList<>();
-
         int numSegments, roadId, nextRoadId;
         boolean startRoad;
         String orientation;
-
         String[] currentData;
         while ((currentLine = reader.readLine()) != null){
             currentData = currentLine.split(",");
@@ -209,7 +191,6 @@ public class Main extends JPanel implements ActionListener {
             roadId = Integer.parseInt(currentData[2]);
             nextRoadId = Integer.parseInt(currentData[3]);
             startRoad = Boolean.parseBoolean(currentData[4]);
-
             roadList.add(new Road(numSegments, orientation, roadId, nextRoadId, startRoad));
         }
         return roadList;
@@ -299,5 +280,4 @@ public class Main extends JPanel implements ActionListener {
         }
         return carList;
     }
-
 }
